@@ -37,7 +37,7 @@ class Navigation
                                 'slug' => $slug,
                                 'private' => $private,
                                 'path' => $private ? "/private/{$slug}.md" : "{$slug}.md",
-                                'edit_url' => "https://github.com/codions/guidelines.codions.com/edit/master/content/{$slug}.md",
+                                'edit_url' => "https://github.com/codions/guidelines.codions.com/edit/main/content/{$slug}.md",
                             ];
                         }, $properties['items']),
                         'private' => $private,
