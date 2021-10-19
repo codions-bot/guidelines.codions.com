@@ -5,7 +5,7 @@
         <nav class="sidebar__contents">
             <div class="sidebar__logo">
                 <a href="https://codions.com" target="spatie">
-                    @include('svg.logo')
+                    <img src="/images/logo-white.svg" height="30">
                 </a>
             </div>
             <div class="sidebar__home">

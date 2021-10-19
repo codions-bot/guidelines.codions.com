@@ -4,7 +4,7 @@
             <div class="home__header__inner">
                 <div class="home__logo">
                     <a href="https://codions.com" target="spatie">
-                        @include('svg.logo')
+                        <img src="/images/logo-white.svg" height="30">
                     </a>
                 </div>
                 <h1 class="home__title">
