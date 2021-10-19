@@ -1,24 +1,4 @@
-# Laravel & PHP Style Guide
-
-- [About Laravel](#about-laravel)
-- [General PHP Rules](#general-php-rules)
-- [Class defaults](#class-defaults)
-- [Typed properties](#typed-properties)
-- [Docblocks](#docblocks)
-- [Strings](#strings)
-- [If statements](#if-statements)
-- [Ternary operators](#ternary-operators)
-- [Comments](#comments)
-- [Configuration](#configuration)
-- [Artisan commands](#artisan-commands)
-- [Routing](#routing)
-- [Controllers](#controllers)
-- [Views](#views)
-- [Validation](#validation)
-- [Blade templates](#blade-templates)
-- [Authorization](#authorization)
-- [Translations](#translations)
-- [Naming classes](#naming-classes)
+# Laravel & PHP
 
 ## About Laravel
 
@@ -30,25 +10,51 @@ Code style must follow [PSR-1](http://www.php-fig.org/psr/psr-1/), [PSR-2](http:
 
 ### Class defaults
 
-By default, we don't use `final`. For our open source stuff, we assume that all our users know they are responsible for writing tests for any overwritten behaviour.
+By default, we don't use `final`. In our team, there aren't many benefits that `final` offers as we don't rely too much on inheritance. For our open source stuff, we assume that all our users know they are responsible for writing tests for any overwritten behaviour.
+
+### Nullable and union types
+
+Whenever possible use the short nullable notation of a type, instead of using a union of the type with `null`.
+
+```php
+// in a class
+
+// Good
+public ?string $variable;
+
+// Bad
+public string | null $variable;
+```
 
 ### Void return types
 
-If a method return nothing, it should be indicated with `void`. 
+If a method returns nothing, it should be indicated with `void`.
 This makes it more clear to the users of your code what your intention was when writing it.
+
+```php
+// Good
+
+// in a Laravel model
+public function scopeArchived(Builder $query): void
+{
+    $query->
+        ...
+}
+```
+
 
 ## Typed properties
 
 You should type a property whenever possible. Don't use a docblock.
 
 ```php
-// good
+// Good
 class Foo
 {
     public string $bar;
 }
 
-// bad
+// Bad
 class Foo
 {
     /** @var string */
@@ -109,30 +115,7 @@ Always use fully qualified class names in docblocks.
  */
 ```
 
-Docblocks for class variables are required, as there's currently no other way to typehint these.
-
-```php
-// Good
-
-class Foo
-{
-    /** @var \Spatie\Url\Url */
-    private $url;
-
-    /** @var string */
-    private $name;
-}
-
-// Bad
-
-class Foo
-{
-    private $url;
-    private $name;
-}
-```
-
-When possible, docblocks should be written on one line.
+Using multiple lines for a docblock, might draw too much attention to it. When possible, docblocks should be written on one line.
 
 ```php
 // Good
@@ -159,6 +142,53 @@ If a variable has multiple types, the most common occurring type should be first
 /** @var null|\Spatie\Goo\Bar */
 ```
 
+## Constructor property promotion
+
+Use constructor property promotion if all properties can be promoted. To make it readable, put each one on a line of its own. Use a comma after the last one.
+
+```php
+// Good
+class MyClass {
+    public function __construct(
+        protected string $firstArgument,
+        protected string $secondArgument,
+    ) {}
+}
+
+// Bad
+class MyClass {
+    protected string $secondArgument
+
+    public function __construct(protected string $firstArgument, string $secondArgument)
+    {
+        $this->secondArgument = $secondArgument;
+    }
+}
+```
+
+## Traits
+
+Each applied trait should go on its own line, and the `use` keyword should be used for each of them. This will result in clean diffs when traits are added or removed.
+
+```php
+// Good
+
+class MyClass
+{
+    use TraitA;
+    use TraitB;
+}
+```
+
+```php
+// Bad
+
+class MyClass
+{
+    use TraitA, TraitB;
+}
+```
+
 ## Strings
 
 When possible prefer string interpolation above `sprintf` and the `.` operator.
@@ -180,10 +210,6 @@ Every portion of a ternary expression should be on its own line unless it's a re
 
 ```php
 // Good
-$result = $object instanceof Model
-    ? $object->name
-    : 'A default value';
-
 $name = $isFoo ? 'foo' : 'bar';
 
 // Bad
@@ -240,15 +266,15 @@ In general, `else` should be avoided because it makes code less readable. In mos
 ```php
 // Good
 
-if (! $conditionBA) {
-   // conditionB A failed
-   
+if (! $conditionA) {
+   // condition A failed
+
    return;
 }
 
 if (! $conditionB) {
-   // conditionB A passed, B failed
-   
+   // condition A passed, B failed
+
    return;
 }
 
@@ -263,12 +289,35 @@ if ($conditionA) {
       // condition A and B passed
    }
    else {
-     // conditionB A passed, B failed
+     // condition A passed, B failed
    }
 }
 else {
-   // conditionB A failed
+   // condition A failed
 }
+```
+
+Another option to refactor an `else` away is using a ternary
+
+```php
+// Bad
+
+if ($condition) {
+    $this->doSomething();
+} 
+else {
+    $this->doSomethingElse();
+}
+
+
+```
+
+```php
+// Good
+
+$condition
+    ? $this->doSomething();
+    : $this->doSomethingElse();
 ```
 
 
@@ -295,13 +344,11 @@ if (! $conditionC) {
 ```
 
 ```php
-// bad
+// Bad
 if ($conditionA && $conditionB && $conditionC) {
   // do stuff
 }
 ```
-
-
 
 ## Comments
 
@@ -317,9 +364,55 @@ Comments should be avoided as much as possible by writing expressive code. If yo
  */
 ```
 
+A possible strategy to refactor away a comment is to create a function with name that describes the comment
+
+```php
+// Good
+$this->calculateLoans();
+```
+
+```php
+// Bad
+
+// Start calculating loans
+```
+
+## Test classes
+
+If you need a specific class for your test cases, you should keep them within the same test file when possible. When you want to reuse test classes throughout tests, it's fine to make a dedicated class instead. Here's an example of internal classes:
+
+```php
+<?php
+
+namespace Spatie\EventSourcing\Tests\AggregateRoots;
+
+// …
+
+class AggregateEntityTest extends TestCase
+{
+    /** @test */
+    public function test_entities()
+    {
+        // …
+    }
+}
+
+class ItemAdded extends ShouldBeStored
+{
+    public function __construct(
+        public string $name
+    ) {
+    }
+}
+
+class CartCleared extends ShouldBeStored
+{
+}
+```
+
 ## Whitespace
 
-Statements should have to breathe. In general always add blank lines between statements, unless they're a sequence of single-line equivalent operations. This isn't something enforceable, it's a matter of what looks best in its context.
+Statements should be allowed to breathe. In general always add blank lines between statements, unless they're a sequence of single-line equivalent operations. This isn't something enforceable, it's a matter of what looks best in its context.
 
 ```php
 // Good
@@ -403,6 +496,42 @@ return [
 
 Avoid using the `env` helper outside of configuration files. Create a configuration value from the `env` variable like above.
 
+When adding config values for a specific service, add them to the `services` config file. Do not create a new config file.
+
+```php
+// Good: adding credentials to `config/services.php`
+return [
+    'ses' => [
+        'key' => env('SES_AWS_ACCESS_KEY_ID'),
+        'secret' => env('SES_AWS_SECRET_ACCESS_KEY'),
+        'region' => env('SES_AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+    
+    'github' => [
+        'username' => env('GITHUB_USERNAME'),
+        'token' => env('GITHUB_TOKEN'),
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => env('GITHUB_CALLBACK_URL'),
+        'docs_access_token' => env('GITHUB_ACCESS_TOKEN'),
+    ],
+    
+    'weyland_yutani' => [
+        'token' => env('WEYLAND_YUTANI_TOKEN')
+    ],   
+];
+```
+
+```php
+// Bad: creating a new config file: `weyland-yutani.php`
+
+return [
+    'weyland_yutani' => [
+        'token' => env('WEYLAND_YUTANI_TOKEN')
+    ],  
+]
+```
+
 ## Artisan commands
 
 The names given to artisan commands should all be kebab-cased.
@@ -427,7 +556,26 @@ public function handle()
 }
 ```
 
-If possible use a descriptive success message eg. `Old records deleted`.
+When the main function of a result is processing items, consider adding output inside of the loop, so progress can be tracked. Put the output before the actual process. If something goes wrong, this makes it easy to know which item caused the error.
+
+At the end of the command, provide a summary on how much processing was done.
+
+```php
+// in a Command
+public function handle()
+{
+    $this->comment("Start processing items...")
+
+    // do some work
+    $items->each(function(Item $item) {
+        $this->info("Processing item id `{$item-id}`...")
+
+        $this->processItem($item)
+    });
+
+    $this->comment("Processed {$item->count()} items.");
+}
+```
 
 ## Routing
 
@@ -438,46 +586,60 @@ https://codions.com/open-source
 https://codions.com/jobs/front-end-developer
 ```
 
-Route names must use camelCase.
+Prefer to use the route tuple notation when possible.
 
 ```php
-Route::get('open-source', 'OpenSourceController@index')->name('openSource');
+// Good
+Route::get('open-source', [OpenSourceController::class, 'index']);
+
+// Bad
+Route::get('open-source', 'OpenSourceController@index');
 ```
 
 ```html
-<a href="{{ route('openSource') }}">
+<a href="{{ action([\App\Http\Controllers\OpenSourceController::class, 'index']) }}">
     Open Source
 </a>
+```
+
+Route names must use camelCase.
+
+```php
+// Good
+Route::get('open-source', [OpenSourceController::class, 'index'])->name('openSource');
+
+// Bad
+Route::get('open-source', [OpenSourceController::class, 'index'])->name('open-source');
 ```
 
 All routes have an http verb, that's why we like to put the verb first when defining a route. It makes a group of routes very readable. Any other route options should come after it.
 
 ```php
-// good: all http verbs come first
-Route::get('/', 'HomeController@index')->name('home');
-Route::get('open-source', 'OpenSourceController@index')->name('openSource');
+// Good: all http verbs come first
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('open-source', [OpenSourceController::class, 'index'])->name('openSource');
 
-// bad: http verbs not easily scannable
-Route::name('home')->get('/', 'HomeController@index');
-Route::name('openSource')->get('OpenSourceController@index');
+// Bad: http verbs not easily scannable
+Route::name('home')->get('/', [HomeController::class, 'index']);
+Route::name('openSource')->get([OpenSourceController::class, 'index']);
 ```
 
 Route parameters should use camelCase.
 
 ```php
-Route::get('news/{newsItem}', 'NewsItemsController@index');
+Route::get('news/{newsItem}', [NewsItemsController::class, 'index']);
 ```
 
 A route url should not start with `/` unless the url would be an empty string.
 
 ```php
-// good
-Route::get('/', 'HomeController@index');
-Route::get('open-source', 'OpenSourceController@index');
+// Good
+Route::get('/', [HomeController::class, 'index']);
+Route::get('open-source', [OpenSourceController::class, 'index']);
 
-//bad
-Route::get('', 'HomeController@index');
-Route::get('/open-source', 'OpenSourceController@index');
+// Bad
+Route::get('', [HomeController::class, 'index']);
+Route::get('/open-source', [OpenSourceController::class, 'index']);
 ```
 
 ## Controllers
@@ -568,7 +730,7 @@ class OpenSourceController
 When using multiple rules for one field in a form request, avoid using `|`, always use array notation. Using an array notation will make it easier to apply custom rule classes to a field.
 
 ```php
-// good
+// Good
 public function rules()
 {
     return [
@@ -576,7 +738,7 @@ public function rules()
     ];
 }
 
-// bad
+// Bad
 public function rules()
 {
     return [
