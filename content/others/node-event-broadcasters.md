@@ -6,8 +6,8 @@ The node process will be run by supervisord. First create a new supervisor progr
 
 ```
 [program:broadcaster]
-command=node /home/forge/xxxxx/broadcaster/server.js
-directory=/home/forge/xxxxx
+command=node /var/www/xxxxx/broadcaster/server.js
+directory=/var/www/xxxxx
 autostart=true
 autorestart=true
 startretries=3

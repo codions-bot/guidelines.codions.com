@@ -33,9 +33,8 @@ This section of the guidelines documents some of our best practices to work secu
 
 ## Misc
 
-- Use BackBlaze to backup your computer. Every few months, make sure that it works
+- Backup your computer. Every few months, make sure that it works
 - Every private key must be protected by a password
-- All Macs should have FileVault enabled
 - Do not use public searchable services like Pastebin or gist to share sensitive code or data
-- Do not install any pirated software on your Mac or phone
+- Do not install any pirated software on your devices
 - Do not use any browser extensions that can track typed keys, passwords or browser history

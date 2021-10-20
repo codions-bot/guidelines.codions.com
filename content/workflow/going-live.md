@@ -55,10 +55,7 @@ _Repeat this section for all languages_
 - [ ] Check structured data for news, events, products,... https://search.google.com/structured-data/testing-tool/
 
 ## 4. Back end checklist
-- [ ] Open up `/blender`
-- [ ] Remove unused modules from main menu 
 - [ ] Configure Analytics dashboard
-- [ ] Create a new admin and try to log in
 - [ ] Try the password reset flow for existing user
 - [ ] Try saving article / news / ...
 - [ ] Verify all e-mail recipients are correct
@@ -85,11 +82,10 @@ _Repeat this section for all languages_
 - [ ] Crawl > Fetch as Google > Submit to index to kickstart index
 
 ### Server
-- [ ] Are DigitalOcean backups enabled?
-- [ ] Are Amazon backups enabled?
+- [ ] Are backups enabled?
 - [ ] Is the output of artisan task `backup:run` ok?
-- [ ] Is artisan scheduled on Forge?
-- [ ] Is Horizon configured in Supervisor on Forge? Command should be `php artisan horizon`. Path should be `/home/forge/my-new-site.com/current`
+- [ ] Is artisan scheduled?
+- [ ] Is Horizon configured in Supervisor on Forge? Command should be `php artisan horizon`. Path should be `/var/www/my-new-site.com/current`
 - [ ] Is the url being monitored?
 - [ ] Is the server being monitored by our server-monitor?
 
