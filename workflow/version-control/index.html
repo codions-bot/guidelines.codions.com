@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#007593">
+<meta name="theme-color" content="#007593">
+
+<meta property="og:image" content=""/>
+<meta property="og:title" content=""/>
+<meta property="og:description" content=""/>
+<meta property="og:url" content="http://guidelines.codions.com/workflow/version-control"/>
+
+    <meta name="csrf-token" content="5LgFaqhs3rlY45OmjEhK5tYWxTkhSYHavGPGGX8u">
+
+            <title>Version Control | Codions Guidelines</title>
+    
+    <link href="/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6194432/608542/css/fonts.css" />
+
+    <script nonce="UwttlsH0MJoGXZMwwgAcTENN2BoPFWHg" src="/js/app.js" defer></script>
+</head>
+<body >
+        <section class="sidebar waves">
+        <nav class="sidebar__contents">
+            <div class="sidebar__logo">
+                <a href="https://codions.com" target="spatie">
+                    <img src="/images/logo-white.svg" height="30">
+                </a>
+            </div>
+            <div class="sidebar__home">
+                <a href="/">Home</a>
+            </div>
+            <ul class="menu menu--sidebar"><li class="-active menu__section"><span class=menu__subtitle>Workflow</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/workflow/new-project-setup">New Project Setup</a></li><li class="-active exact-active menu__item js-sidebar-hide"><a href="/workflow/version-control">Version Control</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/going-live">Going Live</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/security">Security</a></li></ul></li><li class="menu__section"><span class=menu__subtitle>Code Style</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/code-style/laravel-php">Laravel & PHP</a></li><li class="menu__item js-sidebar-hide"><a href="/code-style/javascript">JavaScript</a></li></ul></li><li class="menu__section"><span class=menu__subtitle>Others</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/others/google-analytics">Google Analytics</a></li><li class="menu__item js-sidebar-hide"><a href="/others/node-event-broadcasters">Node Event Broadcasters</a></li></ul></li></ul>
+        </nav>
+        <footer class="sidebar__footer">
+                        <a href="https://codions.com" target="spatie">
+                © codions.com
+            </a>
+        </footer>
+    </section>
+    <span class="sidebar__toggler js-sidebar-toggle" title="Toggle menu"></span>
+    <main class="main">
+        <div class="article">
+            <h1>Version control</h1>
+<p>Writing history</p>
+<p>All our projects use Git, mostly with a repository hosted on GitHub.</p>
+<h2>Repo naming conventions</h2>
+<p>If the repo contains the source code of a site its name should be the main naked domain name of that site. It should be lowercased.</p>
+<ul>
+<li>Bad: <code>https://www.codions.com</code>, <code>www.codions.com</code>, <code>Codions.com</code>
+</li>
+<li>Good: <code>codions.com</code>
+</li>
+</ul>
+<p>Sites that are hosted on a subdomain may use that subdomain in their name</p>
+<ul>
+<li>Bad: <code>codions.com-guidelines</code>
+</li>
+<li>Good: <code>guidelines.codions.com</code>
+</li>
+</ul>
+<p>If the repo concerns something else, for example a package, its name should be kebab-cased.</p>
+<ul>
+<li>Bad: <code>LaravelBackup</code>, <code>Spoon</code>
+</li>
+<li>Good: <code>laravel-backup</code>, <code>spoon</code>
+</li>
+</ul>
+<h2>Branches</h2>
+<p>If you're going to remember one thing in this guide, remember this: <strong>Once a project has gone live, the main branch must always be stable</strong>. It should be safe to deploy the main branch to production at all times. All branches are assumed to be active; stale branches should get cleaned up accordingly.</p>
+<h3>Projects in initial development</h3>
+<p>Projects that aren't live yet have at least two branches: <code>main</code> and <code>develop</code>. Avoid committing directly on the main branch, always commit through develop.</p>
+<p>Feature branches are optional, if you'd like to create a feature branch, make sure it's branched from <code>develop</code>, not <code>main</code>.</p>
+<h3>Live projects</h3>
+<p>Once a project goes live, the <code>develop</code> branch gets deleted. All future commits to <code>main</code> must be added through a feature branch. In most cases, it's preferred to squash your commits on merge.</p>
+<p>There's no strict ruling on feature branch names, just make sure it's clear enough to know what they're for. Branches may only contain lowercase letters and hyphens.</p>
+<ul>
+<li>Bad: <code>feature/mailchimp</code>, <code>random-things</code>, <code>develop</code>
+</li>
+<li>Good: <code>feature-mailchimp</code>, <code>fix-deliverycosts</code> or <code>updates-june-2016</code>
+</li>
+</ul>
+<h3>Pull requests</h3>
+<p>Merging branches via GitHub pull requests isn't a requirement, but can be useful if:</p>
+<ul>
+<li>You want a peer to review your changes</li>
+<li>You want to ensure your branch can be merged and commits can be squashed via an interface</li>
+<li>Future you wants a quick way to retrieve that point in history by browsing passed pull requests</li>
+</ul>
+<h3>Merging and rebasing</h3>
+<p>Ideally, rebase your branch regularly to reduce the chance of merge conflicts.</p>
+<ul>
+<li>If you want to deploy a feature branch to main, use <code>git merge &lt;branch&gt; --squash</code>
+</li>
+<li>If your push is denied, rebase your branch first using <code>git rebase</code>
+</li>
+</ul>
+<h2>Commits</h2>
+<p>There's not strict ruling on commits in projects in initial development, however, descriptive commit messages are recommended. After a project has gone live, descriptive commit messages are required. Always use present tense in commit messages.</p>
+<ul>
+<li>Non-descriptive: <code>wip</code>, <code>commit</code>, <code>a lot</code>, <code>solid</code>
+</li>
+<li>Descriptive: <code>Update deps</code>, <code>Fix vat calculation in delivery costs</code>
+</li>
+</ul>
+<p>Ideally, prefer granular commits.</p>
+<ul>
+<li>Acceptable: <code>Cart fixes</code>
+</li>
+<li>Better: <code>Fix add to cart button</code>, <code>Fix cart count on home</code>
+</li>
+</ul>
+<h2>Git Tips</h2>
+<h3>Creating granular commits with <code>patch</code></h3>
+<p>If you've made multiple changes but want to split them into more granular commits, use <code>git add -p</code>. This will open an interactive session in which you can choose which chunks you want to stage for your commit.</p>
+<h3>Moving commits to a new branch</h3>
+<p>First, create your new branch, then revert the current branch, and finally checkout the new branch.</p>
+<p>Don't do this to commits that have already been pushed without double checking with your collaborators!</p>
+<pre><code class="language-bash">git branch my-branch
+git reset --hard HEAD~3 # OR git reset --hard &lt;commit&gt;
+git checkout my-branch
+</code></pre>
+<h3>Squashing commits already pushed</h3>
+<p>Only execute when you are sure that no-one else pushed changes during your commits.</p>
+<p>First, copy the SHA from the commit previous to your commits that need to be squashed.</p>
+<pre><code class="language-bash">git reset --soft &lt;commit&gt;
+git commit -m &quot;your new message&quot;
+git push --force
+</code></pre>
+<h3>Cleaning up local branches</h3>
+<p>After a while, you'll end up with a few stale branches in your local repository. Branches that don't exist upstream can be cleaned up with <code>git remote prune origin</code>. If you want to ensure you're not about to delete something important, add a <code>--dry-run</code> flag.</p>
+<h2>Resources</h2>
+<ul>
+<li>Most of this is based on the <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a>
+</li>
+<li>Merge vs. rebase on <a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing/workflow-walkthrough">Atlassian</a>
+</li>
+<li>Merge vs. rebase by <a href="https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa">@porteneuve</a>
+</li>
+</ul>
+
+        </div>
+        <footer class="article__footer">
+            <p>Spotted a typo? See something wrong? <a href="https://github.com/codions-bot/guidelines.codions.com/edit/main/content/workflow/version-control.md" target="_blank">Edit this page on GitHub</a>.</p>
+        </footer>
+    </main>
+</body>
+</html>

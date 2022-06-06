@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#007593">
+<meta name="theme-color" content="#007593">
+
+<meta property="og:image" content=""/>
+<meta property="og:title" content=""/>
+<meta property="og:description" content=""/>
+<meta property="og:url" content="http://guidelines.codions.com/workflow/going-live"/>
+
+    <meta name="csrf-token" content="5LgFaqhs3rlY45OmjEhK5tYWxTkhSYHavGPGGX8u">
+
+            <title>Going Live | Codions Guidelines</title>
+    
+    <link href="/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6194432/608542/css/fonts.css" />
+
+    <script nonce="EvlkIQCloO92t9NWdyfKnYkFJDM3kMu8" src="/js/app.js" defer></script>
+</head>
+<body >
+        <section class="sidebar waves">
+        <nav class="sidebar__contents">
+            <div class="sidebar__logo">
+                <a href="https://codions.com" target="spatie">
+                    <img src="/images/logo-white.svg" height="30">
+                </a>
+            </div>
+            <div class="sidebar__home">
+                <a href="/">Home</a>
+            </div>
+            <ul class="menu menu--sidebar"><li class="-active menu__section"><span class=menu__subtitle>Workflow</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/workflow/new-project-setup">New Project Setup</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/version-control">Version Control</a></li><li class="-active exact-active menu__item js-sidebar-hide"><a href="/workflow/going-live">Going Live</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/security">Security</a></li></ul></li><li class="menu__section"><span class=menu__subtitle>Code Style</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/code-style/laravel-php">Laravel & PHP</a></li><li class="menu__item js-sidebar-hide"><a href="/code-style/javascript">JavaScript</a></li></ul></li><li class="menu__section"><span class=menu__subtitle>Others</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/others/google-analytics">Google Analytics</a></li><li class="menu__item js-sidebar-hide"><a href="/others/node-event-broadcasters">Node Event Broadcasters</a></li></ul></li></ul>
+        </nav>
+        <footer class="sidebar__footer">
+                        <a href="https://codions.com" target="spatie">
+                © codions.com
+            </a>
+        </footer>
+    </section>
+    <span class="sidebar__toggler js-sidebar-toggle" title="Toggle menu"></span>
+    <main class="main">
+        <div class="article">
+            <h1>Going live</h1>
+<p>A checklist for all projects that are going live.</p>
+<h2>1. Browserstack tests</h2>
+<ul>
+<li>[ ] Desktop: test on latest versions of Chrome, IE/Edge, Firefox, Safari</li>
+<li>[ ] Mobile: test on latest versions of Mobile Safari, Android</li>
+</ul>
+<h2>2. Front end checklist</h2>
+<h3>Assets</h3>
+<ul>
+<li>[ ] Search sources for <code>http://</code>. Replace by <code>https://</code>
+</li>
+<li>[ ] Lint (s)css sources</li>
+<li>[ ] Webfonts: is the live domain configured in services like Typekit, Fonts.com etc.?</li>
+<li>[ ] Is the browserlist properly configured for autoprefixer and babel-preset-env?</li>
+<li>[ ] When using PurgeCSS: check if layout is preserved.</li>
+</ul>
+<h3>Scripts</h3>
+<ul>
+<li>[ ] Is <code>yarn.lock</code> present?</li>
+<li>[ ] Check JS lint errors. Remove all <code>console.log</code> lines in scripts</li>
+<li>[ ] Check for console errors</li>
+</ul>
+<h3>Page weight</h3>
+<ul>
+<li>[ ] Evaluate total weight of at least homepage</li>
+<li>[ ] Open Inspector network/timeline tab to identify heavy assets</li>
+<li>[ ] Check if heavy assets are cached</li>
+</ul>
+<h3>Audits</h3>
+<ul>
+<li>[ ] Use the Chrome DevTools (in incognito mode) and perform a mobile audit (with throttling) to fix common problems.</li>
+<li>[ ] Repeat with a desktop audit.</li>
+</ul>
+<h2>3. Check content (with an open console)</h2>
+<ul>
+<li>[ ] Are all strings / images present (and translated)?</li>
+<li>[ ] Does menu/submenu have a correct active state on every page?</li>
+<li>[ ] Are 404, 500 and 503 pages provided? Do they provide useful content like 'back to home', search or a navigation tree?</li>
+<li>[ ] Check all pages for n+1 problems</li>
+</ul>
+<h3>Meta</h3>
+<ul>
+<li>[ ] Check page titles / descriptions</li>
+<li>[ ] Test Facebook sharing. Provide og-tags if needed</li>
+<li>[ ] Does Favicon load? Pin the tab in Safari to check pinned icon</li>
+</ul>
+<p><em>Repeat this section for all languages</em></p>
+<h3>Components</h3>
+<ul>
+<li>[ ] Google Maps
+<ul>
+<li>[ ] API key needed/configured?</li>
+<li>[ ] Check info windows</li>
+<li>[ ] Prevent zoom out beyond 1x world</li>
+<li>[ ] Try clicking on markers</li>
+</ul>
+</li>
+<li>[ ] Forms: fill out with wrong/right values</li>
+<li>[ ] Video: check with sound on</li>
+<li>[ ] Try subscribing to a newsletter with incorrect &amp; correct email (use correct mail twice to get 'already subscribed' message)</li>
+<li>[ ] Check layout of emails</li>
+<li>[ ] Check structured data for news, events, products,... https://search.google.com/structured-data/testing-tool/</li>
+</ul>
+<h2>4. Back end checklist</h2>
+<ul>
+<li>[ ] Configure Analytics dashboard</li>
+<li>[ ] Try the password reset flow for existing user</li>
+<li>[ ] Try saving article / news / ...</li>
+<li>[ ] Verify all e-mail recipients are correct</li>
+<li>[ ] Scan database for urls to development domain</li>
+<li>[ ] Check client's logo in header</li>
+</ul>
+<h2>5. Server, DNS &amp; Services</h2>
+<ul>
+<li>[ ] Add redirects from old to new pages if necessary.</li>
+<li>[ ] Install Let's Encrypt certificate</li>
+<li>[ ] Check SSL certificate health https://www.ssllabs.com/ssltest/</li>
+<li>[ ] Check your hostfile to make sure you're looking at the live site</li>
+<li>[ ] Try visiting <code>www</code> domain, should redirect to <code>non-www</code>
+</li>
+<li>[ ] Try out visiting <code>http</code>, should redirect to <code>https</code>
+</li>
+<li>[ ] Verify that all http status codes are ok with https://github.com/spatie/http-status-check</li>
+<li>[ ] Scan for mixed content with https://github.com/spatie/mixed-content-scanner-cli</li>
+<li>[ ] Verify that indexing is not prohibited with <code>x-robots-tag: none</code> by checking <code>curl -I https://url | grep 'x-robots-tag'</code>. Allow robots in <code>.env</code>
+</li>
+<li>[ ] Remove development DNS record</li>
+<li>[ ] Check dns propagation with https://www.whatsmydns.net/</li>
+<li>[ ] Verify Tag Manager / Analytics have been correctly set up</li>
+</ul>
+<h3>Google Search Console</h3>
+<ul>
+<li>[ ] Submit all www/non-www http/https variations</li>
+<li>[ ] Set up non-www https as the preferred domain</li>
+<li>[ ] Crawl &gt; Fetch as Google &gt; Submit to index to kickstart index</li>
+</ul>
+<h3>Server</h3>
+<ul>
+<li>[ ] Are backups enabled?</li>
+<li>[ ] Is the output of artisan task <code>backup:run</code> ok?</li>
+<li>[ ] Is artisan scheduled?</li>
+<li>[ ] Is Horizon configured in Supervisor on Forge? Command should be <code>php artisan horizon</code>. Path should be <code>/var/www/my-new-site.com/current</code>
+</li>
+<li>[ ] Is the url being monitored?</li>
+<li>[ ] Is the server being monitored by our server-monitor?</li>
+</ul>
+<h3>Github</h3>
+<ul>
+<li>[ ] Remove <code>develop</code> branch or other stale branches</li>
+</ul>
+
+        </div>
+        <footer class="article__footer">
+            <p>Spotted a typo? See something wrong? <a href="https://github.com/codions-bot/guidelines.codions.com/edit/main/content/workflow/going-live.md" target="_blank">Edit this page on GitHub</a>.</p>
+        </footer>
+    </main>
+</body>
+</html>

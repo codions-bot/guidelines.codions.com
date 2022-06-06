@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#007593">
+<meta name="theme-color" content="#007593">
+
+<meta property="og:image" content=""/>
+<meta property="og:title" content=""/>
+<meta property="og:description" content=""/>
+<meta property="og:url" content="http://guidelines.codions.com/code-style/javascript"/>
+
+    <meta name="csrf-token" content="5LgFaqhs3rlY45OmjEhK5tYWxTkhSYHavGPGGX8u">
+
+            <title>JavaScript | Codions Guidelines</title>
+    
+    <link href="/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6194432/608542/css/fonts.css" />
+
+    <script nonce="wvpNuyDTZ20BVHZEWaqDB25UMMyLYw4S" src="/js/app.js" defer></script>
+</head>
+<body >
+        <section class="sidebar waves">
+        <nav class="sidebar__contents">
+            <div class="sidebar__logo">
+                <a href="https://codions.com" target="spatie">
+                    <img src="/images/logo-white.svg" height="30">
+                </a>
+            </div>
+            <div class="sidebar__home">
+                <a href="/">Home</a>
+            </div>
+            <ul class="menu menu--sidebar"><li class="menu__section"><span class=menu__subtitle>Workflow</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/workflow/new-project-setup">New Project Setup</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/version-control">Version Control</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/going-live">Going Live</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/security">Security</a></li></ul></li><li class="-active menu__section"><span class=menu__subtitle>Code Style</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/code-style/laravel-php">Laravel & PHP</a></li><li class="-active exact-active menu__item js-sidebar-hide"><a href="/code-style/javascript">JavaScript</a></li></ul></li><li class="menu__section"><span class=menu__subtitle>Others</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/others/google-analytics">Google Analytics</a></li><li class="menu__item js-sidebar-hide"><a href="/others/node-event-broadcasters">Node Event Broadcasters</a></li></ul></li></ul>
+        </nav>
+        <footer class="sidebar__footer">
+                        <a href="https://codions.com" target="spatie">
+                © codions.com
+            </a>
+        </footer>
+    </section>
+    <span class="sidebar__toggler js-sidebar-toggle" title="Toggle menu"></span>
+    <main class="main">
+        <div class="article">
+            <h1>JavaScript</h1>
+<p><a href="https://prettier.io">Prettier</a> determines our code style. While Prettier's output isn't always the prettiest, it's consistent and removes all (meaningless) discussion about code style.</p>
+<p>We try to stick to Prettier's defaults, but have a few overrides to keep our JavaScript code style consistent with PHP.</p>
+<p>The first two rules are actually configured with <code>.editorconfig</code>. We use 4 spaces as indentation.</p>
+<pre><code class="language-txt">indent_size = 4
+</code></pre>
+<p>Since we use 4 spaces instead of the default 2, the default 80 character line length can be a bit short (especially when writing templates in JSX).</p>
+<pre><code class="language-json">{
+    &quot;printWidth&quot;: 120
+}
+</code></pre>
+<p>Finally, we prefer single quotes over double quotes for consistency with PHP.</p>
+<pre><code class="language-json">{
+    &quot;singleQuote&quot;: true
+}
+</code></pre>
+<h2>Variable assignment</h2>
+<p>Prefer <code>const</code> over <code>let</code>. Only use <code>let</code> to indicate that a variable will be reassigned. Never use <code>var</code>.</p>
+<pre><code class="language-js">// Good
+const person = { name: 'Sebastian' };
+person.name = 'Seb';
+
+// Bad, the variable was never reassigned
+let person = { name: 'Sebastian' };
+person.name = 'Seb';
+</code></pre>
+<h2>Variable names</h2>
+<p>Variable names generally shouldn't be abbreviated.</p>
+<pre><code class="language-js">// Good
+function saveUser(user) {
+    localStorage.set('user', user);
+}
+
+// Bad, it's hard to reason about abbreviations in blocks as they grow.
+function saveUser(u) {
+    localStorage.set('user', u);
+}
+</code></pre>
+<p>In single-line arrow functions, abbreviations are allowed to reduce noise if the context is clear enough. For example, if you're calling <code>map</code> of <code>forEach</code> on a collection of items, it's clear that the parameter is an item of a certain type, which can be derived from the collection's substantive variable name.</p>
+<pre><code class="language-js">// Good
+function saveUserSessions(userSessions) {
+    userSessions.forEach(s =&gt; saveUserSession(s));
+}
+
+// Ok, but pretty noisy.
+function saveUserSessions(userSessions) {
+    userSessions.forEach(userSession =&gt; saveUserSession(userSession));
+}
+</code></pre>
+<h2>Comparisons</h2>
+<p>Always use a triple equal to do variable comparisons. If you're unsure of the type, cast it first.</p>
+<pre><code class="language-js">// Good
+const one = 1;
+const another = &quot;1&quot;;
+
+if (one === parseInt(another)) {
+    // ...
+}
+
+// Bad
+const one = 1;
+const another = &quot;1&quot;;
+
+if (one == another) {
+    // ...
+}
+</code></pre>
+<h2>Function keyword vs. arrow functions</h2>
+<p>Function declarations should use the function keyword.</p>
+<pre><code class="language-js">// Good
+function scrollTo(offset) {
+    // ...
+}
+
+// Using an arrow function doesn't provide any benefits here, while the
+// `function`  keyword immediately makes it clear that this is a function.
+const scrollTo = (offset) =&gt; {
+    // ...
+};
+</code></pre>
+<p>Terse, single line functions may also use the arrow syntax. There's no hard rule here.</p>
+<pre><code class="language-js">// Good
+function sum(a, b) {
+    return a + b;
+}
+
+// It's a short and simple method, so squashing it to a one-liner is ok.
+const sum = (a, b) =&gt; a + b;
+</code></pre>
+<pre><code class="language-js">// Good
+export function query(selector) {
+    return document.querySelector(selector);
+}
+
+// This one's a bit longer, having everything on one line feels a bit heavy.
+// It's not easily scannable unlike the previous example.
+export const query = (selector) =&gt; document.querySelector(selector);
+</code></pre>
+<p>Higher-order functions may use arrow functions if it improves readability.</p>
+<pre><code class="language-js">function sum(a, b) {
+    return a + b;
+}
+
+// Good
+const adder = (a) =&gt; (b) =&gt; sum(a, b);
+
+// Ok, but unnecessarily noisy.
+function adder(a) {
+    return function (b) {
+        return sum(a, b);
+    };
+}
+</code></pre>
+<p>Anonymous functions should use arrow functions.</p>
+<pre><code class="language-js">['a', 'b'].map((a) =&gt; a.toUpperCase());
+</code></pre>
+<p>Unless they need access to <code>this</code>.</p>
+<pre><code class="language-js">$('a').on('click', function () {
+    window.location = $(this).attr('href');
+});
+</code></pre>
+<p>Try to keep your functions pure and limit the usage of the <code>this</code> keyword.</p>
+<p>Object methods must use the shorthand method syntax.</p>
+<pre><code class="language-js">// Good
+export default {
+    methods: {
+        handleClick(event) {
+            event.preventDefault();
+        },
+    },
+};
+
+// Bad, the `function` keyword serves no purpose.
+export default {
+    methods: {
+        handleClick: function (event) {
+            event.preventDefault();
+        },
+    },
+};
+</code></pre>
+<h2>Object and array destructuring</h2>
+<p>Destructuring is preferred over assigning variables to the corresponding keys.</p>
+<pre><code class="language-js">// Good
+const [hours, minutes] = '12:00'.split(':');
+
+// Bad, unnecessarily verbose, and requires an extra assignment in this case.
+const time = '12:00'.split(':');
+const hours = time[0];
+const minutes = time[1];
+</code></pre>
+<p>Destructuring is very valuable for passing around configuration-like objects.</p>
+<pre><code class="language-js">function uploader({
+    element,
+    url,
+    multiple = false,
+    beforeUpload = noop,
+    afterUpload = noop,
+}) {
+    // ...
+}
+</code></pre>
+
+        </div>
+        <footer class="article__footer">
+            <p>Spotted a typo? See something wrong? <a href="https://github.com/codions-bot/guidelines.codions.com/edit/main/content/code-style/javascript.md" target="_blank">Edit this page on GitHub</a>.</p>
+        </footer>
+    </main>
+</body>
+</html>

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#007593">
+<meta name="theme-color" content="#007593">
+
+<meta property="og:image" content=""/>
+<meta property="og:title" content=""/>
+<meta property="og:description" content=""/>
+<meta property="og:url" content="http://guidelines.codions.com/code-style/laravel-php"/>
+
+    <meta name="csrf-token" content="5LgFaqhs3rlY45OmjEhK5tYWxTkhSYHavGPGGX8u">
+
+            <title>Laravel &amp; PHP | Codions Guidelines</title>
+    
+    <link href="/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6194432/608542/css/fonts.css" />
+
+    <script nonce="ptmXWfKy4NLAqyYH7pmW3d7tWWbW3YAP" src="/js/app.js" defer></script>
+</head>
+<body >
+        <section class="sidebar waves">
+        <nav class="sidebar__contents">
+            <div class="sidebar__logo">
+                <a href="https://codions.com" target="spatie">
+                    <img src="/images/logo-white.svg" height="30">
+                </a>
+            </div>
+            <div class="sidebar__home">
+                <a href="/">Home</a>
+            </div>
+            <ul class="menu menu--sidebar"><li class="menu__section"><span class=menu__subtitle>Workflow</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/workflow/new-project-setup">New Project Setup</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/version-control">Version Control</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/going-live">Going Live</a></li><li class="menu__item js-sidebar-hide"><a href="/workflow/security">Security</a></li></ul></li><li class="-active menu__section"><span class=menu__subtitle>Code Style</span><ul class="menu__submenu"><li class="-active exact-active menu__item js-sidebar-hide"><a href="/code-style/laravel-php">Laravel & PHP</a></li><li class="menu__item js-sidebar-hide"><a href="/code-style/javascript">JavaScript</a></li></ul></li><li class="menu__section"><span class=menu__subtitle>Others</span><ul class="menu__submenu"><li class="menu__item js-sidebar-hide"><a href="/others/google-analytics">Google Analytics</a></li><li class="menu__item js-sidebar-hide"><a href="/others/node-event-broadcasters">Node Event Broadcasters</a></li></ul></li></ul>
+        </nav>
+        <footer class="sidebar__footer">
+                        <a href="https://codions.com" target="spatie">
+                © codions.com
+            </a>
+        </footer>
+    </section>
+    <span class="sidebar__toggler js-sidebar-toggle" title="Toggle menu"></span>
+    <main class="main">
+        <div class="article">
+            <h1>Laravel &amp; PHP</h1>
+<h2>About Laravel</h2>
+<p>First and foremost, Laravel provides the most value when you write things the way Laravel intended you to write. If there's a documented way to achieve something, follow it. Whenever you do something differently, make sure you have a justification for <em>why</em> you didn't follow the defaults.</p>
+<h2>General PHP Rules</h2>
+<p>Code style must follow <a href="http://www.php-fig.org/psr/psr-1/">PSR-1</a>, <a href="http://www.php-fig.org/psr/psr-2/">PSR-2</a> and <a href="https://www.php-fig.org/psr/psr-12/">PSR-12</a>. Generally speaking, everything string-like that's not public-facing should use camelCase. Detailed examples on these are spread throughout the guide in their relevant sections.</p>
+<h3>Class defaults</h3>
+<p>By default, we don't use <code>final</code>. In our team, there aren't many benefits that <code>final</code> offers as we don't rely too much on inheritance. For our open source stuff, we assume that all our users know they are responsible for writing tests for any overwritten behaviour.</p>
+<h3>Nullable and union types</h3>
+<p>Whenever possible use the short nullable notation of a type, instead of using a union of the type with <code>null</code>.</p>
+<pre><code class="language-php">// in a class
+
+// Good
+public ?string $variable;
+
+// Bad
+public string | null $variable;
+</code></pre>
+<h3>Void return types</h3>
+<p>If a method returns nothing, it should be indicated with <code>void</code>.
+This makes it more clear to the users of your code what your intention was when writing it.</p>
+<pre><code class="language-php">// Good
+
+// in a Laravel model
+public function scopeArchived(Builder $query): void
+{
+    $query-&gt;
+        ...
+}
+</code></pre>
+<h2>Typed properties</h2>
+<p>You should type a property whenever possible. Don't use a docblock.</p>
+<pre><code class="language-php">// Good
+class Foo
+{
+    public string $bar;
+}
+
+// Bad
+class Foo
+{
+    /** @var string */
+    public $bar;
+}
+</code></pre>
+<h2>Docblocks</h2>
+<p>Don't use docblocks for methods that can be fully type hinted (unless you need a description).</p>
+<p>Only add a description when it provides more context than the method signature itself. Use full sentences for descriptions, including a period at the end.</p>
+<pre><code class="language-php">// Good
+class Url
+{
+    public static function fromString(string $url): Url
+    {
+        // ...
+    }
+}
+
+// Bad: The description is redundant, and the method is fully type-hinted.
+class Url
+{
+    /**
+     * Create a url from a string.
+     *
+     * @param string $url
+     *
+     * @return \Spatie\Url\Url
+     */
+    public static function fromString(string $url): Url
+    {
+        // ...
+    }
+}
+</code></pre>
+<p>Always use fully qualified class names in docblocks.</p>
+<pre><code class="language-php">// Good
+
+/**
+ * @param string $url
+ *
+ * @return \Spatie\Url\Url
+ */
+
+// Bad
+
+/**
+ * @param string $foo
+ *
+ * @return Url
+ */
+</code></pre>
+<p>Using multiple lines for a docblock, might draw too much attention to it. When possible, docblocks should be written on one line.</p>
+<pre><code class="language-php">// Good
+
+/** @var string */
+/** @test */
+
+// Bad
+
+/**
+ * @test
+ */
+</code></pre>
+<p>If a variable has multiple types, the most common occurring type should be first.</p>
+<pre><code class="language-php">// Good
+
+/** @var \Spatie\Goo\Bar|null */
+
+// Bad
+
+/** @var null|\Spatie\Goo\Bar */
+</code></pre>
+<h2>Constructor property promotion</h2>
+<p>Use constructor property promotion if all properties can be promoted. To make it readable, put each one on a line of its own. Use a comma after the last one.</p>
+<pre><code class="language-php">// Good
+class MyClass {
+    public function __construct(
+        protected string $firstArgument,
+        protected string $secondArgument,
+    ) {}
+}
+
+// Bad
+class MyClass {
+    protected string $secondArgument
+
+    public function __construct(protected string $firstArgument, string $secondArgument)
+    {
+        $this-&gt;secondArgument = $secondArgument;
+    }
+}
+</code></pre>
+<h2>Traits</h2>
+<p>Each applied trait should go on its own line, and the <code>use</code> keyword should be used for each of them. This will result in clean diffs when traits are added or removed.</p>
+<pre><code class="language-php">// Good
+
+class MyClass
+{
+    use TraitA;
+    use TraitB;
+}
+</code></pre>
+<pre><code class="language-php">// Bad
+
+class MyClass
+{
+    use TraitA, TraitB;
+}
+</code></pre>
+<h2>Strings</h2>
+<p>When possible prefer string interpolation above <code>sprintf</code> and the <code>.</code> operator.</p>
+<pre><code class="language-php">// Good
+$greeting = &quot;Hi, I am {$name}.&quot;;
+</code></pre>
+<pre><code class="language-php">// Bad
+$greeting = 'Hi, I am ' . $name . '.';
+</code></pre>
+<h2>Ternary operators</h2>
+<p>Every portion of a ternary expression should be on its own line unless it's a really short expression.</p>
+<pre><code class="language-php">// Good
+$name = $isFoo ? 'foo' : 'bar';
+
+// Bad
+$result = $object instanceof Model ?
+    $object-&gt;name :
+   'A default value';
+</code></pre>
+<h2>If statements</h2>
+<h3>Bracket position</h3>
+<p>Always use curly brackets.</p>
+<pre><code class="language-php">// Good
+if ($condition) {
+   ...
+}
+
+// Bad
+if ($condition) ...
+</code></pre>
+<h3>Happy path</h3>
+<p>Generally a function should have its unhappy path first and its happy path last. In most cases this will cause the happy path being in an unindented part of the function which makes it more readable.</p>
+<pre><code class="language-php">// Good
+
+if (! $goodCondition) {
+  throw new Exception;
+}
+
+// do work
+</code></pre>
+<pre><code class="language-php">// Bad
+
+if ($goodCondition) {
+ // do work
+}
+
+throw new Exception;
+</code></pre>
+<h3>Avoid else</h3>
+<p>In general, <code>else</code> should be avoided because it makes code less readable. In most cases it can be refactored using early returns. This will also cause the happy path to go last, which is desirable.</p>
+<pre><code class="language-php">// Good
+
+if (! $conditionA) {
+   // condition A failed
+
+   return;
+}
+
+if (! $conditionB) {
+   // condition A passed, B failed
+
+   return;
+}
+
+// condition A and B passed
+</code></pre>
+<pre><code class="language-php">// Bad
+
+if ($conditionA) {
+   if ($conditionB) {
+      // condition A and B passed
+   }
+   else {
+     // condition A passed, B failed
+   }
+}
+else {
+   // condition A failed
+}
+</code></pre>
+<p>Another option to refactor an <code>else</code> away is using a ternary</p>
+<pre><code class="language-php">// Bad
+
+if ($condition) {
+    $this-&gt;doSomething();
+} 
+else {
+    $this-&gt;doSomethingElse();
+}
+
+
+</code></pre>
+<pre><code class="language-php">// Good
+
+$condition
+    ? $this-&gt;doSomething();
+    : $this-&gt;doSomethingElse();
+</code></pre>
+<h3>Compound ifs</h3>
+<p>In general, separate <code>if</code> statements should be preferred over a compound condition. This makes debugging code easier.</p>
+<pre><code class="language-php">// Good
+if (! $conditionA) {
+   return;
+}
+
+if (! $conditionB) {
+   return;
+}
+
+if (! $conditionC) {
+   return;
+}
+
+// do stuff
+</code></pre>
+<pre><code class="language-php">// Bad
+if ($conditionA &amp;&amp; $conditionB &amp;&amp; $conditionC) {
+  // do stuff
+}
+</code></pre>
+<h2>Comments</h2>
+<p>Comments should be avoided as much as possible by writing expressive code. If you do need to use a comment, format it like this:</p>
+<pre><code class="language-php">// There should be a space before a single line comment.
+
+/*
+ * If you need to explain a lot you can use a comment block. Notice the
+ * single * on the first line. Comment blocks don't need to be three
+ * lines long or three characters shorter than the previous line.
+ */
+</code></pre>
+<p>A possible strategy to refactor away a comment is to create a function with name that describes the comment</p>
+<pre><code class="language-php">// Good
+$this-&gt;calculateLoans();
+</code></pre>
+<pre><code class="language-php">// Bad
+
+// Start calculating loans
+</code></pre>
+<h2>Test classes</h2>
+<p>If you need a specific class for your test cases, you should keep them within the same test file when possible. When you want to reuse test classes throughout tests, it's fine to make a dedicated class instead. Here's an example of internal classes:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Spatie\EventSourcing\Tests\AggregateRoots;
+
+// …
+
+class AggregateEntityTest extends TestCase
+{
+    /** @test */
+    public function test_entities()
+    {
+        // …
+    }
+}
+
+class ItemAdded extends ShouldBeStored
+{
+    public function __construct(
+        public string $name
+    ) {
+    }
+}
+
+class CartCleared extends ShouldBeStored
+{
+}
+</code></pre>
+<h2>Whitespace</h2>
+<p>Statements should be allowed to breathe. In general always add blank lines between statements, unless they're a sequence of single-line equivalent operations. This isn't something enforceable, it's a matter of what looks best in its context.</p>
+<pre><code class="language-php">// Good
+public function getPage($url)
+{
+    $page = $this-&gt;pages()-&gt;where('slug', $url)-&gt;first();
+
+    if (! $page) {
+        return null;
+    }
+
+    if ($page['private'] &amp;&amp; ! Auth::check()) {
+        return null;
+    }
+
+    return $page;
+}
+
+// Bad: Everything's cramped together.
+public function getPage($url)
+{
+    $page = $this-&gt;pages()-&gt;where('slug', $url)-&gt;first();
+    if (! $page) {
+        return null;
+    }
+    if ($page['private'] &amp;&amp; ! Auth::check()) {
+        return null;
+    }
+    return $page;
+}
+</code></pre>
+<pre><code class="language-php">// Good: A sequence of single-line equivalent operations.
+public function up()
+{
+    Schema::create('users', function (Blueprint $table) {
+        $table-&gt;increments('id');
+        $table-&gt;string('name');
+        $table-&gt;string('email')-&gt;unique();
+        $table-&gt;string('password');
+        $table-&gt;rememberToken();
+        $table-&gt;timestamps();
+    });
+}
+</code></pre>
+<p>Don't add any extra empty lines between <code>{}</code> brackets.</p>
+<pre><code class="language-php">// Good
+if ($foo) {
+    $this-&gt;foo = $foo;
+}
+
+// Bad
+if ($foo) {
+
+    $this-&gt;foo = $foo;
+
+}
+</code></pre>
+<h2>Configuration</h2>
+<p>Configuration files must use kebab-case.</p>
+<pre><code>config/
+  pdf-generator.php
+</code></pre>
+<p>Configuration keys must use snake_case.</p>
+<pre><code class="language-php">// config/pdf-generator.php
+return [
+    'chrome_path' =&gt; env('CHROME_PATH'),
+];
+</code></pre>
+<p>Avoid using the <code>env</code> helper outside of configuration files. Create a configuration value from the <code>env</code> variable like above.</p>
+<p>When adding config values for a specific service, add them to the <code>services</code> config file. Do not create a new config file.</p>
+<pre><code class="language-php">// Good: adding credentials to `config/services.php`
+return [
+    'ses' =&gt; [
+        'key' =&gt; env('SES_AWS_ACCESS_KEY_ID'),
+        'secret' =&gt; env('SES_AWS_SECRET_ACCESS_KEY'),
+        'region' =&gt; env('SES_AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+    
+    'github' =&gt; [
+        'username' =&gt; env('GITHUB_USERNAME'),
+        'token' =&gt; env('GITHUB_TOKEN'),
+        'client_id' =&gt; env('GITHUB_CLIENT_ID'),
+        'client_secret' =&gt; env('GITHUB_CLIENT_SECRET'),
+        'redirect' =&gt; env('GITHUB_CALLBACK_URL'),
+        'docs_access_token' =&gt; env('GITHUB_ACCESS_TOKEN'),
+    ],
+    
+    'weyland_yutani' =&gt; [
+        'token' =&gt; env('WEYLAND_YUTANI_TOKEN')
+    ],   
+];
+</code></pre>
+<pre><code class="language-php">// Bad: creating a new config file: `weyland-yutani.php`
+
+return [
+    'weyland_yutani' =&gt; [
+        'token' =&gt; env('WEYLAND_YUTANI_TOKEN')
+    ],  
+]
+</code></pre>
+<h2>Artisan commands</h2>
+<p>The names given to artisan commands should all be kebab-cased.</p>
+<pre><code class="language-bash"># Good
+php artisan delete-old-records
+
+# Bad
+php artisan deleteOldRecords
+</code></pre>
+<p>A command should always give some feedback on what the result is. Minimally you should let the <code>handle</code> method spit out a comment at the end indicating that all went well.</p>
+<pre><code class="language-php">// in a Command
+public function handle()
+{
+    // do some work
+
+    $this-&gt;comment('All ok!');
+}
+</code></pre>
+<p>When the main function of a result is processing items, consider adding output inside of the loop, so progress can be tracked. Put the output before the actual process. If something goes wrong, this makes it easy to know which item caused the error.</p>
+<p>At the end of the command, provide a summary on how much processing was done.</p>
+<pre><code class="language-php">// in a Command
+public function handle()
+{
+    $this-&gt;comment(&quot;Start processing items...&quot;)
+
+    // do some work
+    $items-&gt;each(function(Item $item) {
+        $this-&gt;info(&quot;Processing item id `{$item-id}`...&quot;)
+
+        $this-&gt;processItem($item)
+    });
+
+    $this-&gt;comment(&quot;Processed {$item-&gt;count()} items.&quot;);
+}
+</code></pre>
+<h2>Routing</h2>
+<p>Public-facing urls must use kebab-case.</p>
+<pre><code>https://codions.com/open-source
+https://codions.com/jobs/front-end-developer
+</code></pre>
+<p>Prefer to use the route tuple notation when possible.</p>
+<pre><code class="language-php">// Good
+Route::get('open-source', [OpenSourceController::class, 'index']);
+
+// Bad
+Route::get('open-source', 'OpenSourceController@index');
+</code></pre>
+<pre><code class="language-html">&lt;a href=&quot;{{ action([\App\Http\Controllers\OpenSourceController::class, 'index']) }}&quot;&gt;
+    Open Source
+&lt;/a&gt;
+</code></pre>
+<p>Route names must use camelCase.</p>
+<pre><code class="language-php">// Good
+Route::get('open-source', [OpenSourceController::class, 'index'])-&gt;name('openSource');
+
+// Bad
+Route::get('open-source', [OpenSourceController::class, 'index'])-&gt;name('open-source');
+</code></pre>
+<p>All routes have an http verb, that's why we like to put the verb first when defining a route. It makes a group of routes very readable. Any other route options should come after it.</p>
+<pre><code class="language-php">// Good: all http verbs come first
+Route::get('/', [HomeController::class, 'index'])-&gt;name('home');
+Route::get('open-source', [OpenSourceController::class, 'index'])-&gt;name('openSource');
+
+// Bad: http verbs not easily scannable
+Route::name('home')-&gt;get('/', [HomeController::class, 'index']);
+Route::name('openSource')-&gt;get([OpenSourceController::class, 'index']);
+</code></pre>
+<p>Route parameters should use camelCase.</p>
+<pre><code class="language-php">Route::get('news/{newsItem}', [NewsItemsController::class, 'index']);
+</code></pre>
+<p>A route url should not start with <code>/</code> unless the url would be an empty string.</p>
+<pre><code class="language-php">// Good
+Route::get('/', [HomeController::class, 'index']);
+Route::get('open-source', [OpenSourceController::class, 'index']);
+
+// Bad
+Route::get('', [HomeController::class, 'index']);
+Route::get('/open-source', [OpenSourceController::class, 'index']);
+</code></pre>
+<h2>Controllers</h2>
+<p>Controllers that control a resource must use the plural resource name.</p>
+<pre><code class="language-php">class PostsController
+{
+    // ...
+}
+</code></pre>
+<p>Try to keep controllers simple and stick to the default CRUD keywords (<code>index</code>, <code>create</code>, <code>store</code>, <code>show</code>, <code>edit</code>, <code>update</code>, <code>destroy</code>). Extract a new controller if you need other actions.</p>
+<p>In the following example, we could have <code>PostsController@favorite</code>, and <code>PostsController@unfavorite</code>, or we could extract it to a separate <code>FavoritePostsController</code>.</p>
+<pre><code class="language-php">class PostsController
+{
+    public function create()
+    {
+        // ...
+    }
+
+    // ...
+
+    public function favorite(Post $post)
+    {
+        request()-&gt;user()-&gt;favorites()-&gt;attach($post);
+
+        return response(null, 200);
+    }
+
+    public function unfavorite(Post $post)
+    {
+        request()-&gt;user()-&gt;favorites()-&gt;detach($post);
+
+        return response(null, 200);
+    }
+}
+</code></pre>
+<p>Here we fall back to default CRUD words, <code>store</code> and <code>destroy</code>.</p>
+<pre><code class="language-php">class FavoritePostsController
+{
+    public function store(Post $post)
+    {
+        request()-&gt;user()-&gt;favorites()-&gt;attach($post);
+
+        return response(null, 200);
+    }
+
+    public function destroy(Post $post)
+    {
+        request()-&gt;user()-&gt;favorites()-&gt;detach($post);
+
+        return response(null, 200);
+    }
+}
+</code></pre>
+<p>This is a loose guideline that doesn't need to be enforced.</p>
+<h2>Views</h2>
+<p>View files must use camelCase.</p>
+<pre><code>resources/
+  views/
+    openSource.blade.php
+</code></pre>
+<pre><code class="language-php">class OpenSourceController
+{
+    public function index() {
+        return view('openSource');
+    }
+}
+</code></pre>
+<h2>Validation</h2>
+<p>When using multiple rules for one field in a form request, avoid using <code>|</code>, always use array notation. Using an array notation will make it easier to apply custom rule classes to a field.</p>
+<pre><code class="language-php">// Good
+public function rules()
+{
+    return [
+        'email' =&gt; ['required', 'email'],
+    ];
+}
+
+// Bad
+public function rules()
+{
+    return [
+        'email' =&gt; 'required|email',
+    ];
+}
+</code></pre>
+<p>All custom validation rules must use snake_case:</p>
+<pre><code class="language-php">Validator::extend('organisation_type', function ($attribute, $value) {
+    return OrganisationType::isValid($value);
+});
+</code></pre>
+<h2>Blade Templates</h2>
+<p>Indent using four spaces.</p>
+<pre><code class="language-html">&lt;a href=&quot;/open-source&quot;&gt;
+    Open Source
+&lt;/a&gt;
+</code></pre>
+<p>Don't add spaces after control structures.</p>
+<pre><code class="language-html">@if($condition)
+    Something
+@endif
+</code></pre>
+<h2>Authorization</h2>
+<p>Policies must use camelCase.</p>
+<pre><code class="language-php">Gate::define('editPost', function ($user, $post) {
+    return $user-&gt;id == $post-&gt;user_id;
+});
+</code></pre>
+<pre><code class="language-html">@can('editPost', $post)
+    &lt;a href=&quot;{{ route('posts.edit', $post) }}&quot;&gt;
+        Edit
+    &lt;/a&gt;
+@endcan
+</code></pre>
+<p>Try to name abilities using default CRUD words. One exception: replace <code>show</code> with <code>view</code>. A server shows a resource, a user views it.</p>
+<h2>Translations</h2>
+<p>Translations must be rendered with the <code>__</code> function. We prefer using this over <code>@lang</code> in Blade views because <code>__</code> can be used in both Blade views and regular PHP code. Here's an example:</p>
+<pre><code class="language-php">&lt;h2&gt;{{ __('newsletter.form.title') }}&lt;/h2&gt;
+
+{!! __('newsletter.form.description') !!}
+</code></pre>
+<h2>Naming Classes</h2>
+<p>Naming things is often seen as one of the harder things in programming. That's why we've established some high level guidelines for naming classes.</p>
+<h3>Controllers</h3>
+<p>Generally controllers are named by the plural form of their corresponding resource and a <code>Controller</code> suffix. This is to avoid naming collisions with models that are often equally named.</p>
+<p>e.g. <code>UsersController</code> or <code>EventDaysController</code></p>
+<p>When writing non-resourceful controllers you might come across invokable controllers that perform a single action. These can be named by the action they perform again suffixed by <code>Controller</code>.</p>
+<p>e.g. <code>PerformCleanupController</code></p>
+<h3>Resources (and transformers)</h3>
+<p>Both Eloquent resources and Fractal transformers are plural resources suffixed with <code>Resource</code> or <code>Transformer</code> accordingly. This is to avoid naming collisions with models.</p>
+<h3>Jobs</h3>
+<p>A job's name should describe its action.</p>
+<p>E.g. <code>CreateUser</code> or <code>PerformDatabaseCleanup</code></p>
+<h3>Events</h3>
+<p>Events will often be fired before or after the actual event. This should be very clear by the tense used in their name.</p>
+<p>E.g. <code>ApprovingLoan</code> before the action is completed and <code>LoanApproved</code> after the action is completed.</p>
+<h3>Listeners</h3>
+<p>Listeners will perform an action based on an incoming event. Their name should reflect that action with a <code>Listener</code> suffix. This might seem strange at first but will avoid naming collisions with jobs.</p>
+<p>E.g. <code>SendInvitationMailListener</code></p>
+<h3>Commands</h3>
+<p>To avoid naming collisions we'll suffix commands with <code>Command</code>, so they are easiliy distinguisable from jobs.</p>
+<p>e.g. <code>PublishScheduledPostsCommand</code></p>
+<h3>Mailables</h3>
+<p>Again to avoid naming collisions we'll suffix mailables with <code>Mail</code>, as they're often used to convey an event, action or question.</p>
+<p>e.g. <code>AccountActivatedMail</code> or <code>NewEventMail</code></p>
+
+        </div>
+        <footer class="article__footer">
+            <p>Spotted a typo? See something wrong? <a href="https://github.com/codions-bot/guidelines.codions.com/edit/main/content/code-style/laravel-php.md" target="_blank">Edit this page on GitHub</a>.</p>
+        </footer>
+    </main>
+</body>
+</html>
